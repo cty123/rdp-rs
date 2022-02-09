@@ -1,14 +1,17 @@
 [package]
 name = "rdp-rs"
 version = "0.1.0"
-authors = ["Sylvain Peyrefitte <citronneur@gmail.com>"]
-description = "A Pure RUST imlementation of Remote Desktop Protocol"
-repository = "https://github.com/citronneur/rdp-rs"
+authors = [
+    "Sylvain Peyrefitte <citronneur@gmail.com>",
+    "cty123 <ctychen2216@gmail.com>",
+]
+repository = "https://github.com/cty123/rdp-rs"
 readme = "README.md"
 keywords = ["rdp", "security", "network", "windows"]
 categories = ["network"]
 license = "MIT"
 documentation = "https://docs.rs/rdp-rs"
+edition = "2021"
 
 [lib]
 name = "rdp"
@@ -38,6 +41,7 @@ rand = "0.8.4"
 num-bigint = "0.4.3"
 x509-parser = "0.12.0"
 num_enum = "0.5.6"
+tokio = "1.16.1"
 
 # for mtsc-rs
 hex = { version = "^0.4", optional = true }

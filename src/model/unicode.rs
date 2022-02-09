@@ -1,4 +1,5 @@
-use model::data::{Message, U16};
+use crate::model::data::{Message, U16};
+
 use std::io::Cursor;
 
 /// Use to to_unicode function for String
@@ -21,6 +22,6 @@ impl Unicode for String {
             let encode_char = U16::LE(c);
             encode_char.write(&mut result).unwrap();
         }
-        return result.into_inner()
+        return result.into_inner();
     }
 }
