@@ -33,7 +33,9 @@ impl<S: AsyncRead + AsyncWrite + Unpin + Send> TpktClient<S> {
             size: (message.length() + 4) as u16,
         };
 
-        return header.write_to(&mut self.transport).await;
+        header.write_to(&mut self.transport).await?;
+        message.write_to(&mut self.transport).await?;
+        Ok(())
     }
 
     /// Read a payload from the underlying layer
@@ -47,7 +49,7 @@ impl<S: AsyncRead + AsyncWrite + Unpin + Send> TpktClient<S> {
 
         match action {
             Action::FastPathActionX224 => {
-                let padding = self.transport.read_u8().await?;
+                let _padding = self.transport.read_u8().await?;
                 let size = self.transport.read_u16().await?;
 
                 if size < 4 {
@@ -62,7 +64,7 @@ impl<S: AsyncRead + AsyncWrite + Unpin + Send> TpktClient<S> {
                     Ok(_) => Ok(Payload::Raw(buffer)),
                     Err(e) => Err(Error::new(
                         ErrorKind::InvalidData,
-                        "Invalid minimal size for TPKT",
+                        format!("Invalid minimal size for TPKT, {}", e),
                     )),
                 };
             }
@@ -84,7 +86,7 @@ impl<S: AsyncRead + AsyncWrite + Unpin + Send> TpktClient<S> {
                             Ok(_) => Ok(Payload::FastPath(sec_flag, buffer)),
                             Err(e) => Err(Error::new(
                                 ErrorKind::InvalidData,
-                                "Invalid minimal size for TPKT",
+                                format!("Invalid minimal size for TPKT, {}", e),
                             )),
                         };
                     }
@@ -105,7 +107,7 @@ impl<S: AsyncRead + AsyncWrite + Unpin + Send> TpktClient<S> {
                             Ok(_) => Ok(Payload::FastPath(sec_flag, buffer)),
                             Err(e) => Err(Error::new(
                                 ErrorKind::InvalidData,
-                                "Invalid minimal size for TPKT",
+                                format!("Invalid minimal size for TPKT, {}", e),
                             )),
                         };
                     }
