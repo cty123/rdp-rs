@@ -1,4 +1,3 @@
-use crate::core::tpkt;
 use crate::core::tpkt::base::Payload;
 use crate::core::tpkt::client::TpktClient;
 use crate::core::x224::base::{
@@ -6,68 +5,13 @@ use crate::core::x224::base::{
     X224Header, X224CRQ,
 };
 use crate::model::data::{Message, U16, U32};
-// use crate::model::error::{Error, RdpError, RdpErrorKind, RdpResult};
 use crate::nla::sspi::AuthenticationProtocol;
 
 use bytes::Buf;
-use native_tls::Protocol;
 use std::convert::TryFrom;
 use std::io::{Error, ErrorKind, Result};
 use std::option::Option;
 use tokio::io::{AsyncRead, AsyncWrite, AsyncWriteExt, BufReader};
-use tokio_stream::{self as stream, StreamExt};
-
-/// RDP Negotiation Request
-/// Use to inform server about supported
-/// Security protocol
-///
-/// https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-rdpbcgr/902b090b-9cb3-4efc-92bf-ee13373371e3
-// fn rdp_neg_req(
-//     neg_type: Option<NegotiationType>,
-//     result: Option<u32>,
-//     flag: Option<u8>,
-// ) -> Component {
-//     component! [
-//         "type" => neg_type.unwrap_or(NegotiationType::TypeRDPNegReq) as u8,
-//         "flag" => flag.unwrap_or(0),
-//         "length" => Check::new(U16::LE(0x0008)),
-//         "result" => U32::LE(result.unwrap_or(0))
-//     ]
-// }
-
-/// X224 request header
-// fn x224_crq(len: u8, code: MessageType) -> Component {
-//     component! [
-//         "len" => (len + 6) as u8,
-//         "code" => code as u8,
-//         "padding" => trame! [U16::LE(0), U16::LE(0), 0 as u8]
-//     ]
-// }
-
-/// Connection PDU
-/// Include nego for security protocols
-/// And restricted administration mode
-// fn x224_connection_pdu(
-//     neg_type: Option<NegotiationType>,
-//     mode: Option<u8>,
-//     protocols: Option<u32>,
-// ) -> Component {
-//     let negotiation = rdp_neg_req(neg_type, protocols, mode);
-
-//     component![
-//         "header" => x224_crq(negotiation.length() as u8, MessageType::X224TPDUConnectionRequest),
-//         "negotiation" => negotiation
-//     ]
-// }
-
-/// X224 header
-// fn x224_header() -> Component {
-//     component![
-//         "header" => 2 as u8,
-//         "messageType" => MessageType::X224TPDUData as u8,
-//         "separator" => Check::new(0x80 as u8)
-//     ]
-// }
 
 /// x224 client
 pub struct X224Client<S> {

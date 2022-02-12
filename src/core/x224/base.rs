@@ -117,7 +117,7 @@ impl X224CRQ {
     pub fn read_from_buffer(&mut self, buffer: &mut BytesMut) -> std::io::Result<()> {
         self.len = buffer.get_u8();
         self.code = buffer.get_u8();
-        buffer.reader().read_exact(&mut self.padding);
+        buffer.reader().read_exact(&mut self.padding)?;
         Ok(())
     }
 }
@@ -229,8 +229,8 @@ impl X224ConnectionPDU {
     }
 
     pub fn read_from_buffer(&mut self, buffer: &mut BytesMut) -> std::io::Result<()> {
-        self.header.read_from_buffer(buffer);
-        self.negotiation.read_from_buffer(buffer);
+        self.header.read_from_buffer(buffer)?;
+        self.negotiation.read_from_buffer(buffer)?;
         Ok(())
     }
 }
